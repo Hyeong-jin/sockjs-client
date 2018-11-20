@@ -1,13 +1,14 @@
 language: node_js
-node_js:
-  - '0.10'
-before_script:
-  - "gulp test"
+git:
+  depth: 1
+before_install: npm install -g npm@latest
 script:
-  - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && npm test || false'
-addons:
-  sauce_connect: true
+- "./build.sh"
 env:
   global:
-  - secure: L36j3mbU1U2FiOhxYZrTZ7apVnb56gE+QFixsYyDpCRBrVW0q8WR9LTMJx+aPNdlzhRS5FT4gfInujPTnZeb+EvqEoYwtT+CeNG15XtGkfJDkfBFjBa4IZpJAjIwJB+0kKkZr9R7lQEEgy7H9FvLHY2N2WgdzuG8WZwiVRnkwVw=
-  - secure: K6NxT5qIzV/4Ce1HqoYMdpFtqxx5S5Ua/sKp1bbHCXTCft6gLBR3mrf1RR14Wj9AwcM9QY6YbNF/dXGmBdMNtiJN+a2nvcfIoPTGJ3UpK4r2xI5w/U+uhRQMxD55SkWaxUIPvEfgvwyETSpFZRYACnNkpxeQWMkdc14vk74Feu0=
+  - secure: GNUoX4+vkYOftjQ3IBZSYm+yRIo0y4tM9jCTKT4gWHUvDLr/U4K8GoYu5OHqQK6gvAM5RXmhvVFcEbVqZW3J11UbAFEwWEwjzZtxCaJPA0C/U0mcp1dUr0O5Cf/WT/OVyYKVG0+nLfJ4EWP1XKDQRTDtd7mNx66bRCzYmqb2vPo=
+  - secure: KPeveacugD2N5EDhmX1surPMoXtndyk/1ZWELgazA46y9yIi0g9fy+3290ORyIlzB64OBoZtb/U9Yb0CX5kewIsTifiqBto8tTPMH5gK7a/oYWedNlzRjLikuT1GaeL9p3gHc0HRKa359YYf0NObdoPr1+7hQ/PSdVwuk2mgua0=
+matrix:
+  include:
+  - env: NODE_ENV=development
+  - env: BROWSER=true

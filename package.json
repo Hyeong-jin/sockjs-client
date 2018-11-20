@@ -1,8 +1,16 @@
 {
   "name": "sockjs-client",
-  "description": "SockJS-client is a browser JavaScript library that provides a WebSocket-like object. SockJS gives you a coherent, cross-browser, Javascript API which creates a low latency, full duplex, cross-domain communication channel between the browser and the web server.",
-  "version": "1.0.0-alpha1",
-  "author": "Marek Majkowski",
+  "description": "SockJS-client is a browser JavaScript library that provides a WebSocket-like object.",
+  "version": "1.3.0",
+  "author": "Bryce Kahle",
+  "jsdelivr": "dist/sockjs.min.js",
+  "browser": {
+    "./lib/transport/driver/websocket.js": "./lib/transport/browser/websocket.js",
+    "eventsource": "./lib/transport/browser/eventsource.js",
+    "./lib/transport/driver/xhr.js": "./lib/transport/browser/abstract-xhr.js",
+    "crypto": "./lib/utils/browser-crypto.js",
+    "events": "./lib/event/emitter.js"
+  },
   "bugs": {
     "url": "https://github.com/sockjs/sockjs-client/issues"
   },
@@ -10,22 +18,43 @@
     {
       "name": "Bryce Kahle",
       "email": "bkahle@gmail.com"
+    },
+    {
+      "name": "Marek Majkowski",
+      "email": "deadbeef@popcount.org"
     }
   ],
   "dependencies": {
-    "json3": "^3.3.2"
+    "debug": "^3.2.5",
+    "eventsource": "^1.0.7",
+    "faye-websocket": "~0.11.1",
+    "inherits": "^2.0.3",
+    "json3": "^3.3.2",
+    "url-parse": "^1.4.3"
   },
   "devDependencies": {
-    "browserify": "^4.2.3",
-    "exorcist": "^0.1.6",
-    "gulp": "^3.8.7",
-    "minifyify": "^3.0.12",
-    "mocha": "^1.21.4",
-    "mold-source-map": "^0.3.0",
-    "node-static": "^0.5.9",
-    "sockjs": "^0.3.9",
-    "vinyl-source-stream": "^0.1.1",
-    "zuul": "^1.10.1"
+    "browserify": "^16.2.2",
+    "envify": "^4.0.0",
+    "eslint": "^5.6.0",
+    "expect.js": "~0.3.1",
+    "gulp": "^4.0.0",
+    "gulp-header": "^2.0.5",
+    "gulp-rename": "^1.4.0",
+    "gulp-replace": "^1.0.0",
+    "gulp-sourcemaps": "^2.6.0",
+    "gulp-uglify": "^3.0.1",
+    "karma": "^3.0.0",
+    "karma-browserify": "^5.3.0",
+    "karma-browserstack-launcher": "git+https://git@github.com/karma-runner/karma-browserstack-launcher.git#310c22835987b50a908b99d0995fc1655a7e06f5",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-mocha": "^1.3.0",
+    "mocha": "^5.2.0",
+    "node-static": "^0.7.6",
+    "proxyquire": "^2.1.0",
+    "pump": "^3.0.0",
+    "sockjs": "^0.3.17",
+    "vinyl-buffer": "~1.0.0",
+    "vinyl-source-stream": "^2.0.0"
   },
   "homepage": "http://sockjs.org",
   "keywords": [
@@ -33,15 +62,20 @@
     "websocket"
   ],
   "license": "MIT",
-  "main": "./lib/sockjs.js",
-  "private": true,
+  "main": "./lib/entry.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/sockjs/sockjs-client.git"
   },
   "scripts": {
-    "test": "./node_modules/zuul/bin/zuul --sauce-connect -- tests/html/lib/unittests.js tests/html/lib/domtests.js tests/html/lib/endtoendtests.js tests/html/lib/tests.js",
-    "test_ws": "./node_modules/zuul/bin/zuul --sauce-connect -- tests/html/lib/ws_test.js",
-    "test_local": "./node_modules/zuul/bin/zuul --local 9090 -- tests/html/lib/unittests.js tests/html/lib/domtests.js tests/html/lib/endtoendtests.js tests/html/lib/tests.js"
+    "test": "mocha tests/node.js",
+    "test:bundle": "gulp testbundle",
+    "test:browser_local": "npm run test:bundle && npx karma start --browsers Chrome",
+    "test:browser_remote": "npm run test:bundle && npx karma start",
+    "gulp": "gulp",
+    "lint": "eslint .",
+    "version": "gulp release && git add -A dist lib/version.js",
+    "postversion": "npm publish",
+    "postpublish": "git push origin --all && git push origin --tags"
   }
 }
